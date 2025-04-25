@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Catalog</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 1rem;
+      border-bottom: 1px solid #ddd;
+      vertical-align: middle;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    img {
+      width: 80px;
+      height: auto;
+      border-radius: 5px;
+    }
+    .pagination {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .pagination button {
+      padding: 0.5rem 1rem;
+      margin: 0 0.5rem;
+      font-size: 1rem;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .pagination span {
+      font-size: 1rem;
+      margin: 0 1rem;
+    }
+    .pagination button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 600px) {
+      th, td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+      img {
+        width: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Product Catalog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Image</th>
+          <th>Price (INR ₹)</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody id="productTableBody">
+        <!-- Products will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button id="prevBtn">Previous</button>
+      <span id="pageInfo">Page 1 of 1</span>
+      <button id="nextBtn">Next</button>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      { name: "Wireless Headphones", price: 7999, description: "Noise-cancelling over-ear headphones.", image: "https://via.placeholder.com/80?text=Headphones" },
+      { name: "Smartwatch", price: 12999, description: "Fitness tracking smartwatch.", image: "https://via.placeholder.com/80?text=Smartwatch" },
+      { name: "Gaming Mouse", price: 2499, description: "Ergonomic gaming mouse.", image: "https://via.placeholder.com/80?text=Mouse" },
+      { name: "Laptop Stand", price: 1999, description: "Adjustable aluminium stand.", image: "https://via.placeholder.com/80?text=Stand" },
+      { name: "Bluetooth Speaker", price: 3499, description: "Portable speaker with deep bass.", image: "https://via.placeholder.com/80?text=Speaker" },
+      { name: "USB-C Hub", price: 999, description: "Multiport adapter for laptops.", image: "https://via.placeholder.com/80?text=Hub" },
+      { name: "4K Monitor", price: 21999, description: "Ultra HD display for productivity.", image: "https://via.placeholder.com/80?text=Monitor" },
+      { name: "Mechanical Keyboard", price: 4499, description: "Tactile RGB keyboard.", image: "https://via.placeholder.com/80?text=Keyboard" },
+      { name: "Webcam", price: 1599, description: "Full HD video conferencing camera.", image: "https://via.placeholder.com/80?text=Webcam" },
+      { name: "External SSD", price: 5999, description: "Fast storage for backup and transfer.", image: "https://via.placeholder.com/80?text=SSD" },
+      { name: "Desk Lamp", price: 1299, description: "LED lamp with adjustable brightness.", image: "https://via.placeholder.com/80?text=Lamp" },
+      { name: "Wireless Charger", price: 1799, description: "Qi-enabled fast charger pad.", image: "https://via.placeholder.com/80?text=Charger" },
+    ];
+
+    const productsPerPage = 10;
+    let currentPage = 1;
+
+    const tableBody = document.getElementById('productTableBody');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pageInfo = document.getElementById('pageInfo');
+
+    function renderTable() {
+      tableBody.innerHTML = "";
+      const start = (currentPage - 1) * productsPerPage;
+      const end = start + productsPerPage;
+      const currentProducts = products.slice(start, end);
+
+      currentProducts.forEach(product => {
+        const row = `
+          <tr>
+            <td>${product.name}</td>
+            <td><img src="${product.image}" alt="${product.name}"/></td>
+            <td>₹${product.price.toLocaleString()}</td>
+            <td>${product.description}</td>
+          </tr>
+        `;
+        tableBody.insertAdjacentHTML('beforeend', row);
+      });
+
+      const totalPages = Math.ceil(products.length / productsPerPage);
+      pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const totalPages = Math.ceil(products.length / productsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+      }
+    });
+
+    renderTable();
+  </script>
+</body>
+</html>
